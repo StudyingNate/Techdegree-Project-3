@@ -1,2 +1,2 @@
-console.log("hello");
-console.log("Test");
+//Element selector to auto-select name field on page load.
+document.getElementById("name").focus();
