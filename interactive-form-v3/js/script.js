@@ -1,5 +1,5 @@
 //Variable to auto-select name field on page load.
-const nameField = document.getElementById("name").focus();
+const nameFocus = document.getElementById("name").focus();
 
 
 //Variables to reference job role and to hide the text input for "Other" job role by default. 
@@ -42,9 +42,9 @@ shirtDesign.addEventListener("change", (e) => {
 
 
 /*  
-    Create variables that select the <fieldset> and <p> elements, 
-    Create variable for starting a total cost amount to 0.
-    Create variable that will hold the array of checkbox.
+    Created variables that select the <fieldset> and <p> elements, 
+    Created variable for starting a total cost amount to 0.
+    Created variable that will hold the array of checkbox.
 */
 const registerForActivity = document.getElementById("activities");
 const totalCost = document.getElementById("activities-cost");
@@ -62,23 +62,56 @@ registerForActivity.addEventListener("change", (e) => {
     let eventCost = parseInt(e.target.getAttribute("data-cost"));
     if (e.target.checked) {
         addedCost += eventCost;
-    }
-    else {
+    } else {
         addedCost -= eventCost;    
     }
 
     for(let i = 0; i < allEvents.length; i++) {
         if  (e.target.getAttribute("data-day-and-time") === allEvents[i].getAttribute("data-day-and-time") 
-        && e.target.checked === true) {
-        allEvents[i].disabled = true;
-        e.target.disabled = false;
-        } 
-        else if (e.target.getAttribute("data-day-and-time") === allEvents[i].getAttribute("data-day-and-time") 
-        && e.target.checked === false) {
-        allEvents[i].disabled = false;
+            && e.target.checked === true) {
+            allEvents[i].disabled = true;
+            e.target.disabled = false;
+        } else if (e.target.getAttribute("data-day-and-time") === allEvents[i].getAttribute("data-day-and-time") 
+            && e.target.checked === false) {
+            allEvents[i].disabled = false;
         }
     }
     totalCost.innerHTML = `Total: ${addedCost}`;
 });
+
+
+/*
+    Create variables that select Paypal,Bitcoin, Credit Card and User payment type
+    elements. By default, Bitcoin and Paypal's info are hidden and credit card option
+    is selected on page load.
+*/
+const bitCoin = document.getElementById("bitcoin");
+const creditCard = document.getElementById("credit-card");
+const payPal = document.getElementById("paypal");
+const userPayment = document.getElementById("payment");
+
+userPayment.children[1].setAttribute("selected", true);
+bitCoin.style.display = "none";
+payPal.style.display = "none";
+
+/*  
+    Event listener will look for change in userPayment and display correct 
+    payment method if event target equal to selected option.
+*/
+userPayment.addEventListener("change", (e) => {
+    if (e.target.value === "bitcoin") {
+        document.getElementById("bitcoin").style.display = "block";
+        creditCard.style.display = "none";
+        payPal.style.display = "none";
+     } else if (e.target.value === "paypal") {
+        document.getElementById("paypal").style.display = "block";
+        creditCard.style.display = "none";
+        bitCoin.style.display = "none";
+     } else {
+        document.getElementById("credit-card").style.display = "block";
+        bitCoin.style.display = "none";
+        payPal.style.display = "none";
+     } 
+    });
 
 
