@@ -1,6 +1,6 @@
 //Variable to auto-select name field on page load.
-let nameField = document.getElementById("name");
-nameField.focus();
+const username = document.getElementById("name");
+username.focus();
 
 //Variables to reference job role and to hide the text input for "Other" job role by default.
 let jobRole = document.getElementById("title");
@@ -124,84 +124,88 @@ userPayment.addEventListener("change", (e) => {
     Name, Email, Register for Activities, Card #, Zip, CVV and form element 
     Note: Name and Register for Activities variables already created.
 */
-let emailField = document.getElementById("email");
-let cardField = document.getElementById("cc-num");
-let zipField = document.getElementById("zip");
-let cvvField = document.getElementById("cvv");
-const formField = document.querySelector("form");
+const email = document.getElementById("email");
+const card = document.getElementById("cc-num");
+const zip = document.getElementById("zip");
+const cvv = document.getElementById("cvv");
+const form = document.querySelector("form");
 
-formField.addEventListener("submit", (e) => {
-    if (!nameValidated ||  !emailValidated || 
-        !cardValidated || !zipValidated ||
-        !cvvValidated) {
-        e.preventDefault();
-        }
-         
+
+ form.addEventListener("submit", (e) => {
+    console.log(nameField());
+
+    e.preventDefault();
 });
 
-const nameValidated = () => {
-  let nameSubmit = nameField.value;
-  validName = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/.test(nameSubmit);
-  if (validName) {
-    validate(nameSubmit);
-  } else {
-    invalid(nameSubmit);
-  }
+// Functions to distinguish whether the element is validated/invalid
+const validated = (element) => {
+    element.parentElement.classList.add("valid");
+    element.parentElement.classList.remove("not-valid");
+    element.parentElement.lastElementChild.style.display = "none";
 };
 
-const emailValidated = () => {
-  let emailSubmit = emailField.value;
-  validEmail =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-      emailSubmit
-    );
-  if (validEmail) {
-    validate(emailSubmit);
-  } else {
-    invalid(emailSubmit);
-  }
-  return nameValidated;
+const invalidated = (element) => {
+    element.parentElement.classList.add("not-valid");
+    element.parentElement.classList.remove("valid");
+    element.parentElement.lastElementChild.style.display = "block";
 };
 
-const cardValidated = () => {
-  let cardSubmit = cardField.value;
-  validCard = /^\d{13,16}$/.test(cardSubmit);
-  if (validCard) {
-    validate(cardSubmit);
-  } else {
-    invalid(cardSubmit);
-  }
-  return cardValidated;
-};
-const zipValidated = () => {
-  let zipSubmit = zipField.value;
-  validZip = /^[0-9]{5}$/.test(zipSubmit);
-  if (validZip) {
-    validate(zipSubmit);
-  } else {
-    invalid(zipSubmit);
-  }
-  return zipValidated;
+const nameField = () => {
+    let nameSubmit = username.value;
+    let validName = /^[a-z\d]{3,12}$/.test(nameSubmit);
+    if (validName) {
+        validated(nameSubmit);
+    } else {
+        invalidated(nameSubmit);
+    }
 };
 
-const cvvValidated = () => {
-  let cvvSubmit = cvvField.value;
-  validCvv = /^[0-9]{3}$/.test(cvvSubmit);
-  if (validCvv) {
-    validate(cvvSubmit);
-  } else {
-    invalid(cvvSubmit);
-  }
-  return cvvValidated;
+const emailField = () => {
+    let zippSubmit = email.value;
+    let validZip = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/.test(zippSubmit);
+    if (validZip) {
+        validated(zippSubmit);
+    } else {
+        invalidated(zippSubmit);
+    }
 };
-function validate(element) {
-  element.parentElement.classList.add("valid");
-  element.parentElement.classList.remove("not-valid");
-  element.parentElement.lastElementChild.style.display = "none";
-}
 
-function invalid(element) {
-  element.parentElement.classList.add("not-valid");
-  element.parentElement.classList.remove("valid");
-  element.parentElement.lastElementChild.style.display = "block";
-}
+const registerField = () => {
+    if (registerForActivity > 0) {
+        console.log(registerField());
+        validated(registerForActivity);
+    } else {
+        invalidated(registerForActivity);
+    }
+};
+
+const cardField = () => {
+    let cardSubmit = card.value;
+    let validCard = /^[0-9]{8}$/.test(cardSubmit);
+    if (validCard) {
+        validated(cardSubmit);
+    } else {
+        invalidated(cardSubmit);
+ }
+};
+
+const zipField = () => {
+    let zippSubmit = email.value;
+    let validZip = /^[0-9]{5}$/.test(zippSubmit);
+    if (validZip) {
+        validated(zippSubmit);
+    } else {
+        invalidated(zippSubmit);
+    }
+};
+
+const cvvField = () => {
+    let zippSubmit = email.value;
+    let validZip = /^[0-9]{3}$/.test(zippSubmit);
+    if (validZip) {
+        validated(zippSubmit);
+    } else {
+        invalidated(zippSubmit);
+    }
+};
+
