@@ -9,7 +9,7 @@ let otherJob = (document.getElementById("other-job-role").style.display =
 
 //Toggle for between showing text input for "Other".
 // https://www.w3schools.com/ used for "block" reference.
-jobRole.addEventListener("change", (e) => {
+jobRole.addEventListener("change", e => {
   if (e.target.value === "other") {
     document.getElementById("other-job-role").style.display = "block";
   } else {
@@ -28,7 +28,7 @@ const shirtTheme = shirtColor.children;
     Event listener that will enable the "Color:" field if "Design" selected from the dropdown 
     menu while hiding those that do not fall under that theme.
 */
-shirtDesign.addEventListener("change", (e) => {
+shirtDesign.addEventListener("change", e => {
   document.getElementById("color").disabled = false;
   for (let i = 0; i < shirtTheme.length; i++) {
     if (e.target.value === shirtTheme[i].getAttribute("data-theme")) {
@@ -58,7 +58,7 @@ const allEvents = document.querySelectorAll("#activities-box input");
         the selected array position if values are true.
     3.  If activities are not selected but share the same date/time, removes disabled activity status.
 */
-registerForActivity.addEventListener("change", (e) => {
+registerForActivity.addEventListener("change", e => {
   let eventCost = parseInt(e.target.getAttribute("data-cost"));
   if (e.target.checked) {
     addedCost += eventCost;
@@ -103,7 +103,7 @@ payPal.style.display = "none";
     Event listener will look for change in userPayment and display correct 
     payment method if event target equal to selected option.
 */
-userPayment.addEventListener("change", (e) => {
+userPayment.addEventListener("change", e => {
   if (e.target.value === "bitcoin") {
     document.getElementById("bitcoin").style.display = "block";
     creditCard.style.display = "none";
@@ -130,82 +130,87 @@ const zip = document.getElementById("zip");
 const cvv = document.getElementById("cvv");
 const form = document.querySelector("form");
 
+const nameSubmit = username.value;
+const emailSubmit = email.value;
+const cardSubmit = card.value;
+const zipSubmit = zip.value;
+const cvvSubmit = cvv.value;
 
- form.addEventListener("submit", (e) => {
-    console.log(nameField());
+/*
+1. Name Input
+2. Event Listener to listen for a submit event.
+3. Validator to return true or false
+4. Console log true or false value
+5. 
+*/
+const nameValidator = () => {
+  let nameInput = nameSubmit;
+  let validName = /^[a-z ,.'-]+$/i.test(nameInput);
+  return validName;
+};
 
+form.addEventListener("submit", e => {
+  if (nameValidator() === false) {
+    invalidated(nameSubmit);
     e.preventDefault();
+  } else {
+    validated(nameSubmit);
+    e.preventDefault();
+  }
 });
 
-// Functions to distinguish whether the element is validated/invalid
-const validated = (element) => {
-    element.parentElement.classList.add("valid");
-    element.parentElement.classList.remove("not-valid");
-    element.parentElement.lastElementChild.style.display = "none";
+const validated = element => {
+  console.log("Correct");
+
+  // element.parentElement.className.add(".valid");
+  // element.parentElement.className.remove(".not-valid");
+  // element.lastElementChild.style.display = "none";
 };
 
-const invalidated = (element) => {
-    element.parentElement.classList.add("not-valid");
-    element.parentElement.classList.remove("valid");
-    element.parentElement.lastElementChild.style.display = "block";
+const invalidated = element => {
+  console.log("Incorrect");
+  // element.parentElement.className.add(".not-valid");
+  // element.parentElement.className.remove(".valid");
+  // element.lastElementChild.style.display = "block";
 };
-
-const nameField = () => {
-    let nameSubmit = username.value;
-    let validName = /^[a-z\d]{3,12}$/.test(nameSubmit);
-    if (validName) {
-        validated(nameSubmit);
-    } else {
-        invalidated(nameSubmit);
-    }
-};
-
-const emailField = () => {
-    let zippSubmit = email.value;
-    let validZip = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/.test(zippSubmit);
-    if (validZip) {
-        validated(zippSubmit);
-    } else {
-        invalidated(zippSubmit);
-    }
-};
-
-const registerField = () => {
-    if (registerForActivity > 0) {
-        console.log(registerField());
-        validated(registerForActivity);
-    } else {
-        invalidated(registerForActivity);
-    }
-};
-
-const cardField = () => {
-    let cardSubmit = card.value;
-    let validCard = /^[0-9]{8}$/.test(cardSubmit);
-    if (validCard) {
-        validated(cardSubmit);
-    } else {
-        invalidated(cardSubmit);
- }
-};
-
-const zipField = () => {
-    let zippSubmit = email.value;
-    let validZip = /^[0-9]{5}$/.test(zippSubmit);
-    if (validZip) {
-        validated(zippSubmit);
-    } else {
-        invalidated(zippSubmit);
-    }
-};
-
-const cvvField = () => {
-    let zippSubmit = email.value;
-    let validZip = /^[0-9]{3}$/.test(zippSubmit);
-    if (validZip) {
-        validated(zippSubmit);
-    } else {
-        invalidated(zippSubmit);
-    }
-};
-
+// const emailField = () => {
+//   let emailSubmit = email.value;
+// let validEmail = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/.test(
+//   emailSubmit
+// );
+// if (validEmail) {
+//   validated(emailField);
+//   e.preventDefault();
+// }
+// };
+// const registerField = () => {
+//   if (addedCost > 0) {
+//     //console.log(registerField());
+//     validated(registerForActivity);
+//   }
+// };
+// const cardField = () => {
+//   let cardSubmit = card.value;
+//   let validCard = /^[0-9]{8}$/.test(cardSubmit);
+//   if (validCard) {
+//     validated(cardField);
+//     e.preventDefault();
+//   }
+// };
+// const zipField = () => {
+//   let zipSubmit = email.value;
+//   let validZip = /^[0-9]{5}$/.test(zipSubmit);
+//   if (validZip) {
+//     validated(zipField);
+//     e.preventDefault();
+//   }
+// };
+// const cvvField = () => {
+//   let zipSubmit = email.value;
+//   let validZip = /^[0-9]{3}$/.test(zipSubmit);
+//   if (validZip) {
+//     validated(cvvField);
+//     e.preventDefault();
+//   }
+// };
+// // Functions to distinguish whether the element is validated/invalid
