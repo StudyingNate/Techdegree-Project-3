@@ -1,5 +1,5 @@
 //Variable to auto-select name field on page load.
-const username = document.getElementById("name");
+let username = document.getElementById("name");
 username.focus();
 
 //Variables to reference job role and to hide the text input for "Other" job role by default.
@@ -22,6 +22,7 @@ jobRole.addEventListener("change", e => {
 const shirtDesign = document.getElementById("design");
 const shirtColor = document.getElementById("color");
 shirtColor.disabled = true;
+
 const shirtTheme = shirtColor.children;
 
 /*
@@ -130,34 +131,111 @@ const zip = document.getElementById("zip");
 const cvv = document.getElementById("cvv");
 const form = document.querySelector("form");
 
-const nameSubmit = username.value;
-const emailSubmit = email.value;
-const cardSubmit = card.value;
-const zipSubmit = zip.value;
-const cvvSubmit = cvv.value;
-
 /*
-1. Name Input
+1. Elemennt Validators 
 2. Event Listener to listen for a submit event.
-3. Validator to return true or false
-4. Console log true or false value
-5. 
+3. Function to Console log true or false value 
 */
+
 const nameValidator = () => {
-  let nameInput = nameSubmit;
-  let validName = /^[a-z ,.'-]+$/i.test(nameInput);
+  let nameInput = username.value;
+  let validName = /^[a-zA-Z ]{2,30}$/.test(nameInput);
   return validName;
 };
 
+const emailValidator = () => {
+  let emailSubmit = email.value;
+  let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+  emailSubmit);
+  return validEmail;
+};
+
+const registerValidator = () => { 
+  if (addedCost > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const cardValidator = () => {
+  let cardSubmit = card.value;
+  let validCard = /^[0-9]{16}$/.test(cardSubmit);
+  return validCard;
+};
+
+const zipValidator = () => {
+  let zipSubmit = zip.value;
+  let validZip = /^[0-9]{5}$/.test(zipSubmit);
+  return validZip;
+};
+
+const cvvValidator = () => {
+  let cvvSubmit = cvv.value;
+  let validCvv = /^[0-9]{3}$/.test(cvvSubmit);
+  return validCvv;
+};
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
 form.addEventListener("submit", e => {
-  if (nameValidator() === false) {
-    invalidated(nameSubmit);
+  if (!nameValidator()) {
+    invalidated(username);
     e.preventDefault();
   } else {
-    validated(nameSubmit);
+    validated(username);
     e.preventDefault();
   }
+
+  if (!emailValidator()) {
+  invalidated(email);
+  e.preventDefault();
+  } else {
+  validated(email);
+  e.preventDefault();
+}
+
+  if (!registerValidator()) {
+    invalidated(registerForActivity);
+    e.preventDefault();
+  } else {
+    validated(registerForActivity);
+    e.preventDefault();
+  }
+
+  if (!cardValidator()) {
+    invalidated(card);
+    e.preventDefault();
+  } else {
+    validated(card);
+    e.preventDefault();
+  }
+
+  if (!zipValidator()) {
+    invalidated(zip);
+    e.preventDefault();
+  } else {
+    validated(zip);
+    e.preventDefault();
+  }
+
+  if (!cvvValidator()) {
+    invalidated(cvv);
+    e.preventDefault();
+  } else {
+    validated(cvv);
+    e.preventDefault();
+  }
+
 });
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
+// // Functions to distinguish whether the element is validated/invalid
 
 const validated = element => {
   console.log("Correct");
@@ -173,44 +251,5 @@ const invalidated = element => {
   // element.parentElement.className.remove(".valid");
   // element.lastElementChild.style.display = "block";
 };
-// const emailField = () => {
-//   let emailSubmit = email.value;
-// let validEmail = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/.test(
-//   emailSubmit
-// );
-// if (validEmail) {
-//   validated(emailField);
-//   e.preventDefault();
-// }
-// };
-// const registerField = () => {
-//   if (addedCost > 0) {
-//     //console.log(registerField());
-//     validated(registerForActivity);
-//   }
-// };
-// const cardField = () => {
-//   let cardSubmit = card.value;
-//   let validCard = /^[0-9]{8}$/.test(cardSubmit);
-//   if (validCard) {
-//     validated(cardField);
-//     e.preventDefault();
-//   }
-// };
-// const zipField = () => {
-//   let zipSubmit = email.value;
-//   let validZip = /^[0-9]{5}$/.test(zipSubmit);
-//   if (validZip) {
-//     validated(zipField);
-//     e.preventDefault();
-//   }
-// };
-// const cvvField = () => {
-//   let zipSubmit = email.value;
-//   let validZip = /^[0-9]{3}$/.test(zipSubmit);
-//   if (validZip) {
-//     validated(cvvField);
-//     e.preventDefault();
-//   }
-// };
-// // Functions to distinguish whether the element is validated/invalid
+
+
