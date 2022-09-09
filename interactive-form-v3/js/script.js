@@ -9,7 +9,7 @@ let otherJob = (document.getElementById("other-job-role").style.display =
 
 //Toggle for between showing text input for "Other".
 // https://www.w3schools.com/ used for "block" reference.
-jobRole.addEventListener("change", e => {
+jobRole.addEventListener("change", (e) => {
   if (e.target.value === "other") {
     document.getElementById("other-job-role").style.display = "block";
   } else {
@@ -29,7 +29,7 @@ const shirtTheme = shirtColor.children;
     Event listener that will enable the "Color:" field if "Design" selected from the dropdown 
     menu while hiding those that do not fall under that theme.
 */
-shirtDesign.addEventListener("change", e => {
+shirtDesign.addEventListener("change", (e) => {
   document.getElementById("color").disabled = false;
   for (let i = 0; i < shirtTheme.length; i++) {
     if (e.target.value === shirtTheme[i].getAttribute("data-theme")) {
@@ -59,7 +59,7 @@ const allEvents = document.querySelectorAll("#activities-box input");
         the selected array position if values are true.
     3.  If activities are not selected but share the same date/time, removes disabled activity status.
 */
-registerForActivity.addEventListener("change", e => {
+registerForActivity.addEventListener("change", (e) => {
   let eventCost = parseInt(e.target.getAttribute("data-cost"));
   if (e.target.checked) {
     addedCost += eventCost;
@@ -104,7 +104,7 @@ payPal.style.display = "none";
     Event listener will look for change in userPayment and display correct 
     payment method if event target equal to selected option.
 */
-userPayment.addEventListener("change", e => {
+userPayment.addEventListener("change", (e) => {
   if (e.target.value === "bitcoin") {
     document.getElementById("bitcoin").style.display = "block";
     creditCard.style.display = "none";
@@ -146,11 +146,12 @@ const nameValidator = () => {
 const emailValidator = () => {
   let emailSubmit = email.value;
   let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-  emailSubmit);
+    emailSubmit
+  );
   return validEmail;
 };
 
-const registerValidator = () => { 
+const registerValidator = () => {
   if (addedCost > 0) {
     return true;
   } else {
@@ -180,55 +181,46 @@ const cvvValidator = () => {
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
   if (!nameValidator()) {
     invalidated(username);
-    e.preventDefault();
   } else {
     validated(username);
-    e.preventDefault();
   }
 
   if (!emailValidator()) {
-  invalidated(email);
-  e.preventDefault();
+    invalidated(email);
   } else {
-  validated(email);
-  e.preventDefault();
-}
+    validated(email);
+  }
 
   if (!registerValidator()) {
     invalidated(registerForActivity);
-    e.preventDefault();
   } else {
     validated(registerForActivity);
-    e.preventDefault();
   }
 
-  if (!cardValidator()) {
-    invalidated(card);
-    e.preventDefault();
-  } else {
-    validated(card);
-    e.preventDefault();
-  }
+  if (userPayment.value === "credit-card") {
+    if (!cardValidator()) {
+      invalidated(card);
+    } else {
+      validated(card);
+    }
 
-  if (!zipValidator()) {
-    invalidated(zip);
-    e.preventDefault();
-  } else {
-    validated(zip);
-    e.preventDefault();
-  }
+    if (!zipValidator()) {
+      invalidated(zip);
+    } else {
+      validated(zip);
+    }
 
-  if (!cvvValidator()) {
-    invalidated(cvv);
-    e.preventDefault();
-  } else {
-    validated(cvv);
-    e.preventDefault();
+    if (!cvvValidator()) {
+      invalidated(cvv);
+    } else {
+      validated(cvv);
+    }
   }
-
 });
 
 //////////////////////////////////////////////////////////////
@@ -237,19 +229,20 @@ form.addEventListener("submit", e => {
 
 // // Functions to distinguish whether the element is validated/invalid
 
-const validated = element => {
+const validated = (element) => {
   console.log("Correct");
 
-  // element.parentElement.className.add(".valid");
-  // element.parentElement.className.remove(".not-valid");
-  // element.lastElementChild.style.display = "none";
+  element.className.add(".valid");
+  element.className.remove(".not-valid");
+  element.lastElementChild.style.display = "none";
 };
 
-const invalidated = element => {
+const invalidated = (element) => {
   console.log("Incorrect");
-  // element.parentElement.className.add(".not-valid");
-  // element.parentElement.className.remove(".valid");
-  // element.lastElementChild.style.display = "block";
+  element.parentElement.className.add(".not-valid");
+  element.parentElement.className.remove(".valid");
+  element.lastElementChild.style.display = "block";
 };
 
-
+const focusCheck = document.querySelectorAll(`input[type="checkbox"]`);
+console.log(focusCheck);
