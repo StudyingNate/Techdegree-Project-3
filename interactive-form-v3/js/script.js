@@ -182,7 +182,9 @@ const cvvValidator = () => {
 //////////////////////////////////////////////////////////////
 
 form.addEventListener("submit", (e) => {
+if(invalidated) {
   e.preventDefault();
+}
 
   if (!nameValidator()) {
     invalidated(username);
@@ -229,20 +231,14 @@ form.addEventListener("submit", (e) => {
 
 // // Functions to distinguish whether the element is validated/invalid
 
-const validated = (element) => {
-  console.log("Correct");
-
-  element.className.add(".valid");
-  element.className.remove(".not-valid");
-  element.lastElementChild.style.display = "none";
-};
-
 const invalidated = (element) => {
-  console.log("Incorrect");
-  element.parentElement.className.add(".not-valid");
-  element.parentElement.className.remove(".valid");
-  element.lastElementChild.style.display = "block";
+  element.parentNode.className = 'not-valid';
+  element.parentNode.className.remove = 'valid';
+  element.parentNode.lastElementChild.style.display = 'block';
 };
 
-const focusCheck = document.querySelectorAll(`input[type="checkbox"]`);
-console.log(focusCheck);
+const validated = (element) => {  
+  element.parentNode.className = 'valid';
+  element.parentNode.className.remove = 'not-valid';
+  element.parentNode.lastElementChild.style.display = 'none';
+};
