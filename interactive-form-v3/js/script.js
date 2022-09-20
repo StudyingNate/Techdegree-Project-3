@@ -47,7 +47,7 @@ shirtDesign.addEventListener("change", (e) => {
     Created variable for starting a total cost amount to 0.
     Created variable that will hold the array of checkbox.
 */
-const registerForActivity = document.getElementById("activities");
+const registerForActivity = document.getElementById("activities-box");
 const totalCost = document.getElementById("activities-cost");
 let addedCost = 0;
 const allEvents = document.querySelectorAll("#activities-box input");
@@ -83,7 +83,7 @@ registerForActivity.addEventListener("change", (e) => {
       allEvents[i].disabled = false;
     }
   }
-  totalCost.innerHTML = `Total: ${addedCost}`;
+  totalCost.innerHTML = `Total: $${addedCost}`;
 });
 
 /*
@@ -132,7 +132,7 @@ const cvv = document.getElementById("cvv");
 const form = document.querySelector("form");
 
 /*
-1. Elemennt Validators 
+1. Element Validators 
 2. Event Listener to listen for a submit event.
 3. Function to Console log true or false value 
 */
@@ -140,9 +140,16 @@ const form = document.querySelector("form");
 const nameValidator = () => {
   let nameInput = username.value;
   let validName = /^[a-zA-Z ]{2,30}$/.test(nameInput);
-  return validName;
-};
 
+  if (isNaN(nameInput)) {
+    return validName;
+  } else if (!isNaN(nameInput) && nameInput !== "") {
+    document.getElementById("name-hint").textContent =
+      "Numeric values are invalid";
+  } else if (nameInput === "" || null || undefined) {
+    document.getElementById("name-hint").style.display = "block";
+  }
+};
 const emailValidator = () => {
   let emailSubmit = email.value;
   let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
@@ -161,7 +168,7 @@ const registerValidator = () => {
 
 const cardValidator = () => {
   let cardSubmit = card.value;
-  let validCard = /^[0-9]{16}$/.test(cardSubmit);
+  let validCard = /^[0-9]{13,16}$/.test(cardSubmit);
   return validCard;
 };
 
@@ -182,9 +189,9 @@ const cvvValidator = () => {
 //////////////////////////////////////////////////////////////
 
 form.addEventListener("submit", (e) => {
-if(invalidated) {
-  e.preventDefault();
-}
+  if (invalidated) {
+    e.preventDefault();
+  }
 
   if (!nameValidator()) {
     invalidated(username);
@@ -232,13 +239,13 @@ if(invalidated) {
 // // Functions to distinguish whether the element is validated/invalid
 
 const invalidated = (element) => {
-  element.parentNode.className = 'not-valid';
-  element.parentNode.className.remove = 'valid';
-  element.parentNode.lastElementChild.style.display = 'block';
+  element.parentNode.classList.add("not-valid");
+  element.parentNode.classList.remove("valid");
+  element.parentNode.lastElementChild.style.display = "block";
 };
 
-const validated = (element) => {  
-  element.parentNode.className = 'valid';
-  element.parentNode.className.remove = 'not-valid';
-  element.parentNode.lastElementChild.style.display = 'none';
+const validated = (element) => {
+  element.parentNode.classList.add("valid");
+  element.parentNode.classList.remove("not-valid");
+  element.parentNode.lastElementChild.style.display = "none";
 };
