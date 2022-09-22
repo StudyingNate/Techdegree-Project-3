@@ -1,6 +1,15 @@
+//////////////////////////////////////////////////////////////
+//3. The "Name" field:
+//////////////////////////////////////////////////////////////
+
 //Variable to auto-select name field on page load.
 let username = document.getElementById("name");
 username.focus();
+
+
+//////////////////////////////////////////////////////////////
+//4. "Job Role" section:
+//////////////////////////////////////////////////////////////
 
 //Variables to reference job role and to hide the text input for "Other" job role by default.
 let jobRole = document.getElementById("title");
@@ -16,6 +25,11 @@ jobRole.addEventListener("change", (e) => {
     document.getElementById("other-job-role").style.display = "none";
   }
 });
+
+
+//////////////////////////////////////////////////////////////
+//5. "T-Shirt Info" section:
+//////////////////////////////////////////////////////////////
 
 // Variables for selecting the "Design" & "Color" elements.
 // Color element is disabled by default on page load.
@@ -42,6 +56,11 @@ shirtDesign.addEventListener("change", (e) => {
   }
 });
 
+
+//////////////////////////////////////////////////////////////
+//6. "Register for Activities" section:
+//////////////////////////////////////////////////////////////
+
 /*  
     Created variables that select the <fieldset> and <p> elements, 
     Created variable for starting a total cost amount to 0.
@@ -50,7 +69,7 @@ shirtDesign.addEventListener("change", (e) => {
 const registerForActivity = document.getElementById("activities-box");
 const totalCost = document.getElementById("activities-cost");
 let addedCost = 0;
-const allEvents = document.querySelectorAll("#activities-box input");
+const allEvents = document.querySelectorAll("input[type=checkbox]");
 
 /*Event listner for change on registerForActivity..
     1.  Checks if target is selected and adds the target cost 
@@ -86,6 +105,11 @@ registerForActivity.addEventListener("change", (e) => {
   totalCost.innerHTML = `Total: $${addedCost}`;
 });
 
+
+//////////////////////////////////////////////////////////////
+//7. "Payment Info" section:
+//////////////////////////////////////////////////////////////
+
 /*
     Create variables that select Paypal,Bitcoin, Credit Card and User payment type
     elements. By default, Bitcoin and Paypal's info are hidden and credit card option
@@ -120,10 +144,18 @@ userPayment.addEventListener("change", (e) => {
   }
 });
 
+
+//////////////////////////////////////////////////////////////
+//8. Form Validation:
+//////////////////////////////////////////////////////////////
+
 /* 
     Create variables to select items below..
     Name, Email, Register for Activities, Card #, Zip, CVV and form element 
     Note: Name and Register for Activities variables already created.
+    Regex Test Validators
+    Submit Eventlistener
+    Helper validators that will change the CSS dispayed on the page.
 */
 const email = document.getElementById("email");
 const card = document.getElementById("cc-num");
@@ -131,12 +163,7 @@ const zip = document.getElementById("zip");
 const cvv = document.getElementById("cvv");
 const form = document.querySelector("form");
 
-/*
-1. Element Validators 
-2. Event Listener to listen for a submit event.
-3. Function to Console log true or false value 
-*/
-
+// REGEX Check Validators
 const nameValidator = () => {
   let nameInput = username.value;
   let validName = /^[a-zA-Z ]{2,30}$/.test(nameInput);
@@ -147,9 +174,11 @@ const nameValidator = () => {
     document.getElementById("name-hint").textContent =
       "Numeric values are invalid";
   } else if (nameInput === "" || null || undefined) {
-    document.getElementById("name-hint").style.display = "block";
+    document.getElementById("name-hint").textContent =
+      "Name field cannot be blank";
   }
 };
+
 const emailValidator = () => {
   let emailSubmit = email.value;
   let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
@@ -184,33 +213,30 @@ const cvvValidator = () => {
   return validCvv;
 };
 
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-
+//Event Listeners on "Submit"
 form.addEventListener("submit", (e) => {
   if (invalidated) {
     e.preventDefault();
   }
-
+  //Name
   if (!nameValidator()) {
     invalidated(username);
   } else {
     validated(username);
   }
-
+  //Email
   if (!emailValidator()) {
     invalidated(email);
   } else {
     validated(email);
   }
-
+  //Activities
   if (!registerValidator()) {
     invalidated(registerForActivity);
   } else {
     validated(registerForActivity);
   }
-
+  //Payment Method
   if (userPayment.value === "credit-card") {
     if (!cardValidator()) {
       invalidated(card);
@@ -232,12 +258,7 @@ form.addEventListener("submit", (e) => {
   }
 });
 
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-
-// // Functions to distinguish whether the element is validated/invalid
-
+// Helper functions to distinguish whether the element(the validators) are to be validated/invalid.
 const invalidated = (element) => {
   element.parentNode.classList.add("not-valid");
   element.parentNode.classList.remove("valid");
@@ -249,3 +270,41 @@ const validated = (element) => {
   element.parentNode.classList.remove("not-valid");
   element.parentNode.lastElementChild.style.display = "none";
 };
+
+
+//////////////////////////////////////////////////////////////
+//9. Accessibility:
+//////////////////////////////////////////////////////////////
+
+//Checkbox "focus" and "blur" accessibility support.
+for (let i = 0; i < allEvents.length; i++) {
+  allEvents[i].addEventListener("focus", (e) => {
+    e.target.parentElement.classList.add("focus");
+  });
+
+  allEvents[i].addEventListener("blur", (e) => {
+    e.target.parentElement.classList.remove("focus");
+  });
+}
+
+//Realtime verification process using keyup event listeners.
+form.addEventListener("keyup", (e) => {
+  let nameInput = username.value;
+  let validName = /^[a-zA-Z ]{2,30}$/.test(nameInput);
+
+  if (isNaN(e.target.value === nameInput)) {
+    return validName;
+  } else if (!isNaN(nameInput) && nameInput !== "") {
+    document.getElementById("name-hint").textContent =
+      "Numeric values are invalid";
+  } else if (nameInput === "") {
+    document.getElementById("name-hint").textContent =
+      "Name field cannot be blank";
+  }
+
+  if (!nameValidator()) {
+    invalidated(username);
+  } else {
+    validated(username);
+  }
+});
