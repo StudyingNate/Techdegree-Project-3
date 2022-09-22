@@ -215,43 +215,51 @@ const cvvValidator = () => {
 
 //Event Listeners on "Submit"
 form.addEventListener("submit", (e) => {
-  if (invalidated) {
-    e.preventDefault();
-  }
+
   //Name
   if (!nameValidator()) {
     invalidated(username);
+    e.preventDefault();
   } else {
     validated(username);
   }
+
   //Email
   if (!emailValidator()) {
     invalidated(email);
+    e.preventDefault();
+
   } else {
     validated(email);
   }
+
   //Activities
   if (!registerValidator()) {
     invalidated(registerForActivity);
+    e.preventDefault();
   } else {
     validated(registerForActivity);
   }
+
   //Payment Method
   if (userPayment.value === "credit-card") {
     if (!cardValidator()) {
       invalidated(card);
+      e.preventDefault();
     } else {
       validated(card);
     }
 
     if (!zipValidator()) {
       invalidated(zip);
+      e.preventDefault();
     } else {
       validated(zip);
     }
 
     if (!cvvValidator()) {
       invalidated(cvv);
+      e.preventDefault();
     } else {
       validated(cvv);
     }
